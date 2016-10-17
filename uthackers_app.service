@@ -1,0 +1,10 @@
+[Unit]
+Description = uthackers_app daemon
+
+[Service]
+ExecStart = cd /var/www/uthacks-php; php -S localhost:8080 
+Restart = always
+Type = simple
+
+[Install]
+WantedBy = multi-user.target
