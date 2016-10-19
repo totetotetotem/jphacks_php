@@ -2,7 +2,8 @@
 Description = uthackers_app daemon
 
 [Service]
-ExecStart = cd /var/www/uthacks-php; php -S localhost:8080 
+WorkingDirectory=/home/webapp/jphacks_php
+ExecStart =/usr/sbin/php-fpm -y php-fpm.conf
 Restart = always
 Type = simple
 
