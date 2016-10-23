@@ -3,6 +3,7 @@ Description = uthackers_app daemon
 
 [Service]
 WorkingDirectory=/home/webapp/jphacks_php
+EnvironmentFile=/home/webapp/env.sh
 ExecStart =/usr/sbin/php-fpm -y php-fpm.conf
 Restart = always
 Type = simple
