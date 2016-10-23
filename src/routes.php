@@ -22,7 +22,7 @@ $app->post('/line', function($request, $response, $args) {
         }
         }
 
-        funciton api_post_request($token, $message) {
+        function api_post_request($token, $message) {
         $url = 'https://api.line.me/v2/bot/message/reply';
         $channel_access_token = getenv("LINE_CHANNEL_ACCESS_TOKEN");
         $headers = array(
