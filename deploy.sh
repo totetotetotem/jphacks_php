@@ -1,4 +1,5 @@
 git pull origin master
+php composer.phar install
 nginx -s reload
 systemctl restart uthackers_app
 
