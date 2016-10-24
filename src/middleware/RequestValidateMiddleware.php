@@ -33,7 +33,11 @@ class RequestValidateMiddleware
 		if ($validator->isValid()) {
 			return $next($request, $response);
 		} else {
-			return get_renderer()->renderAsError($response, 400, 'Invalid request', 'input validation failed');
+			$extra = [];
+			foreach ($validator->getErrors() as $error) {
+				$extra[] = sprintf('[%s] %s', $error['property'], $error['message']);
+			}
+			return get_renderer()->renderAsError($response, 400, 'Invalid request', 'input validation failed', $extra);
 		}
 	}
 }
