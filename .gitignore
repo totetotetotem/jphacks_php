@@ -1,8 +1,10 @@
 /*.iml
 /.idea/
 /generated-api-schema/
-/db/generated-classes/
+/db/generated-classes/ORM/Base/
+/db/generated-classes/ORM/Map/
 /db/generated-conf/
+/db/generated-sql/
 /vendor/
 /logs/*
 !/logs/README.md
