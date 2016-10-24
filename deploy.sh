@@ -1,5 +1,12 @@
+#!/bin/bash
 git pull origin master
 php composer.phar install
+(cd db; ../vendor/bin/propel config:convert) && \
+(cd db; ../vendor/bin/propel migration:migrate) && \
+(cd db; ../vendor/bin/propel migration:diff) && \
+(cd db; ../vendor/bin/propel migration:migrate) && \
+(cd db; ../vendor/bin/propel model:build)
+php composer.phar dump-autoload
 nginx -s reload
 systemctl restart uthackers_app
 
