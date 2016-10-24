@@ -17,3 +17,6 @@ $container['logger'] = function ($c) {
     $logger->pushHandler(new Monolog\Handler\StreamHandler($settings['path'], $settings['level']));
     return $logger;
 };
+
+// propel
+require_once __DIR__ . '/../db/generated-conf/config.php';
