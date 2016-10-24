@@ -17,10 +17,7 @@ class RequestValidateMiddleware
 		$response = $response->withHeader('Content-Type', 'application/json;charset=utf-8');
 		if (!file_exists($schema_file)) {
 			// エラー出力
-			return $response->withJson([
-				'error' => [
-					'message' => 'Invalid API endpoint',
-					'reason' => 'no spec']], 404);
+			return get_renderer()->renderAsError($response, 404, 'Invalid API endpoint', 'no spec');
 		}
 
 		$schema = json_decode(file_get_contents($schema_file));
@@ -28,10 +25,7 @@ class RequestValidateMiddleware
 		$data = json_decode($request->getBody());
 
 		if ($data === null) {
-			return $response->withJson([
-				'error' => [
-					'message' => 'Invalid request',
-					'reason' => 'malformed json']], 400);
+			return get_renderer()->renderAsError($response, 400, 'Invalid request', 'malformed json');
 		}
 
 		$validator = new JsonSchema\Validator();
@@ -39,11 +33,7 @@ class RequestValidateMiddleware
 		if ($validator->isValid()) {
 			return $next($request, $response);
 		} else {
-			return $response->withJson([
-				'error' => [
-					'message' => 'Invalid request',
-					'reason' => 'input validation failed',
-					'info' => $validator->getErrors()]], 400);
+			return get_renderer()->renderAsError($response, 400, 'Invalid request', 'input validation failed');
 		}
 	}
 }

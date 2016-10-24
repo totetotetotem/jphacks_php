@@ -3,12 +3,6 @@
 
 $container = $app->getContainer();
 
-// view renderer
-require_once __DIR__ . '/middleware/JsonRenderer.php';
-$container['renderer'] = function ($c) {
-	return new middleware\JsonRenderer();
-};
-
 // monolog
 $container['logger'] = function ($c) {
     $settings = $c->get('settings')['logger'];

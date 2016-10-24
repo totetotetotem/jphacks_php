@@ -14,5 +14,5 @@ $app->post('/user/add', function (ServerRequestInterface $request, ResponseInter
 			->save();
 	});
 
-	return $this->renderer->render($response);
+	return get_renderer()->render($response);
 });

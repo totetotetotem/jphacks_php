@@ -41,14 +41,16 @@ class JsonRenderer
 		return $response;
 	}
 
-	public function renderAsError(ResponseInterface $response, $message, $reason, $extra = null)
+	public function renderAsError(ResponseInterface $response, $status_code, $message, $reason, $extra = null)
 	{
-		$status = $response->getStatusCode();
+		$response = $response->withStatus($status_code);
 		$data['meta'] = [
-			'status' => $status,
+			'status' => $status_code,
 			'message' => $message,
-			'reason' => $reason,
-			'extra' => $extra];
+			'reason' => $reason];
+		if ($extra !== null) {
+			$data['meta']['extra'] = $extra;
+		}
 
 		$response->getBody()->write(json_encode($data));
 		return $response;

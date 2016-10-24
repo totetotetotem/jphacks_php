@@ -19,10 +19,7 @@ class AuthMiddleware
 			->findOne();
 		if ($user === null) {
 			$output = $response->getBody();
-			$output->withJson([
-				'error' => [
-					'message' => 'Access denied',
-					'reason' => 'invalid token']]);
+			return get_renderer()->renderAsError($response, 403, 'Access denied', 'invalid token');
 		}
 		$request = $request->withAttribute('user', $user);
 		return $next($request, $response);
