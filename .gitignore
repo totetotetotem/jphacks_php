@@ -1,6 +1,8 @@
 /*.iml
 /.idea/
 /generated-api-schema/
+/db/generated-classes/
+/db/generated-conf/
 /vendor/
 /logs/*
 !/logs/README.md
