@@ -1,6 +1,9 @@
 <?php
 
-$app->post('/user/add', function (\Psr\Http\Message\ServerRequestInterface $request, \Psr\Http\Message\ResponseInterface $response, $args) {
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+
+$app->post('/user/add', function (ServerRequestInterface $request, ResponseInterface $response, $args) {
 	transaction(function () {
 		$family = new \ORM\Family();
 		$family->save();
@@ -10,4 +13,6 @@ $app->post('/user/add', function (\Psr\Http\Message\ServerRequestInterface $requ
 			->setFamilyId($family->getFamilyId())
 			->save();
 	});
+
+	return $this->renderer->render($response);
 });

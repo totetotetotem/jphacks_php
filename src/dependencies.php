@@ -4,9 +4,9 @@
 $container = $app->getContainer();
 
 // view renderer
+require_once __DIR__ . '/middleware/JsonRenderer.php';
 $container['renderer'] = function ($c) {
-    $settings = $c->get('settings')['renderer'];
-    return new Slim\Views\PhpRenderer($settings['template_path']);
+	return new middleware\JsonRenderer();
 };
 
 // monolog
