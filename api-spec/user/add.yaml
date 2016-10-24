@@ -1,0 +1,6 @@
+input: []
+output:
+  user:
+    +fields:
+      access_token:
+        type: string
