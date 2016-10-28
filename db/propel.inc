@@ -17,7 +17,7 @@ return [
 					'classname' => 'Propel\Runtime\Connection\ConnectionWrapper',
 					'dsn' => 'mysql:host=localhost;dbname=fresh_fridge',
 					'user' => 'fresh_fridge',
-					'password' => 'a+cvL~.R/4lkj~44',
+					'password' => get_db_password(),
 					'attributes' => []]]],
 		'runtime' => [
 			'defaultConnection' => 'fresh_fridge',
