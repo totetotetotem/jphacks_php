@@ -1,8 +1,8 @@
 <?php
 function get_db_password()
 {
-	if (file_exists(__DIR__ . '/../password.inc')) {
-		include_once __DIR__ . '/../password.inc';
+	if (file_exists(__DIR__ . '/../../password.inc')) {
+		include_once __DIR__ . '/../../password.inc';
 		return DB_PASSWORD;
 	} else {
 		return 'a+cvL~.R/4lkj~44';
