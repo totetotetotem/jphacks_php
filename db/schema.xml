@@ -22,7 +22,7 @@
 		<foreign-key foreignTable="family">
 			<reference local="family_id" foreign="family_id"/>
 		</foreign-key>
-        <column name="item_name" type="varchar(256)" required="true"/>
+        <column name="item_name" type="varchar" size="255" required="true"/>
         <column name="expire_date" type="timestamp" required="true" />
 	</table>
 </database>
