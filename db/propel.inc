@@ -1,11 +1,14 @@
 <?php
-function get_db_password()
-{
-	if (file_exists(__DIR__ . '/../../password.inc')) {
-		include_once __DIR__ . '/../../password.inc';
-		return DB_PASSWORD;
-	} else {
-		return 'a+cvL~.R/4lkj~44';
+if (!defined('PROPEL_INC_INCLUDED_AB58D2CA')) {
+	define('PROPEL_INC_INCLUDED_AB58D2CA', true);
+	function get_db_password()
+	{
+		if (file_exists(__DIR__ . '/../../password.inc')) {
+			include_once __DIR__ . '/../../password.inc';
+			return DB_PASSWORD;
+		} else {
+			return 'a+cvL~.R/4lkj~44';
+		}
 	}
 }
 return [
