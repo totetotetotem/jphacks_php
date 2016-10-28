@@ -2,6 +2,7 @@
 // Routes
 
 require_once __DIR__ . '/routes/user.php';
+require_once __DIR__ . '/routes/item.php';
 
 $app->post('/line', function($request, $response, $args) {
         function api_post_request($token, $message) {
