@@ -1,4 +1,4 @@
-user:
+family:
   +db_fields:
-    - access_token
     - family_id
+    - token

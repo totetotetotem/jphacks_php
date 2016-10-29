@@ -17,12 +17,9 @@ $app->group('/user', function () {
 				->save();
 
 			return [
-				'user' => [
-					'access_token' => $user->getAccessToken(),
-					'family_id' => $user->getFamilyId()],
-				'family' => [
-					'token' => $family->getToken()]];
+				'user' => $user->format_as_response(),
+				'family' => $family->format_as_response()];
 		});
 		return get_renderer()->render($response, $data);
-	})->add(new RequestValidateMiddleware());
+	})->add(new RequestValidateMiddleware(null, true));
 });

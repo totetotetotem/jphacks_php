@@ -1,6 +1,6 @@
 input: []
 output:
   user:
-    +fields:
-      access_token:
-        type: string
+    +include: user.yaml
+  family:
+    +include: family.yaml

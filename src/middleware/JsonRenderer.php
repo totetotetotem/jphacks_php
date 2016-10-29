@@ -21,17 +21,10 @@ class JsonRenderer
 	/**
 	 * Render a template
 	 *
-	 * $data cannot contain template as a key
-	 *
-	 * throws RuntimeException if $templatePath . $template does not exist
-	 *
 	 * @param ResponseInterface $response
 	 * @param array $data
 	 *
 	 * @return ResponseInterface
-	 *
-	 * @throws \InvalidArgumentException
-	 * @throws \RuntimeException
 	 */
 	public function render(ResponseInterface $response, array $data = [])
 	{
@@ -42,6 +35,16 @@ class JsonRenderer
 		return $response;
 	}
 
+	/**
+	 * Render error
+	 *
+	 * @param ResponseInterface $response
+	 * @param int $status_code
+	 * @param string $message
+	 * @param string $reason
+	 * @param mixed $extra json passable-object
+	 * @return ResponseInterface
+	 */
 	public function renderAsError(ResponseInterface $response, $status_code, $message, $reason, $extra = null)
 	{
 		$response = $response->withStatus($status_code);

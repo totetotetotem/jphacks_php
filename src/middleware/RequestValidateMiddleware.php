@@ -49,15 +49,21 @@ class RequestValidateMiddleware
 		if ($validator->isValid()) {
 			/** @var ResponseInterface $real_response */
 			$real_response = $next($request, $response);
-			$validator->check(json_decode($real_response->getBody()->getContents()), $schema->output);
-			if ($validator->isValid()) {
-				return $real_response;
-			} else {
-				$extra = [];
-				foreach ($validator->getErrors() as $error) {
-					$extra[] = sprintf('[%s] %s', $error['property'], $error['message']);
+			if ($this->check_out) {
+				$real_body = $real_response->getBody();
+				$real_body->rewind();
+				$validator->check(json_decode($real_body->getContents()), $schema->output);
+				if ($validator->isValid()) {
+					return $real_response;
+				} else {
+					$extra = [];
+					foreach ($validator->getErrors() as $error) {
+						$extra[] = sprintf('[%s] %s', $error['property'], $error['message']);
+					}
+					return get_renderer()->renderAsError($response, 500, 'Invalid request', 'output validation failed', $extra);
 				}
-				return get_renderer()->renderAsError($response, 500, 'Invalid request', 'output validation failed', $extra);
+			} else {
+				return $real_response;
 			}
 		} else {
 			$extra = [];
