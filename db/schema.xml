@@ -43,4 +43,12 @@
 			<index-column name="item_name"/>
 		</index>
 	</table>
+	<table name="item_search">
+		<column name="search_id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
+		<column name="item_id" type="integer" required="true"/>
+		<column name="word" type="varchar" required="true"/>
+		<index>
+			<index-column name="word"/>
+		</index>
+	</table>
 </database>
