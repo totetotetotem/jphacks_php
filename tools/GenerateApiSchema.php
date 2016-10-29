@@ -185,19 +185,24 @@ function main()
 {
 	chdir(SPEC_DIR);
 	init_propel_map();
-	$yaml_files = glob('**/*.yaml');
-	foreach ($yaml_files as $yaml_file) {
-		if ($yaml_file[0] == '_') { // _includes
-			continue;
-		}
-		$outfile = DEST_REL_DIR . '/' . str_replace('.yaml', '.json', $yaml_file);
-		$outdir = dirname($outfile);
-		if (!is_dir($outdir)) {
-			mkdir($outdir, 0755, true);
-		}
-		convert_file($yaml_file, $outfile);
-	}
 
+	$file_pattern = '@\./[^_].+\.yaml$@';
+	$dir = new RecursiveDirectoryIterator('.');
+	$ite = new RecursiveIteratorIterator($dir);
+	$yaml_files_iterator = new RegexIterator($ite, $file_pattern, RegexIterator::GET_MATCH);
+	foreach ($yaml_files_iterator as $yaml_files) {
+		foreach ($yaml_files as $yaml_file) {
+			if ($yaml_file[0] == '_') { // _includes
+				continue;
+			}
+			$outfile = DEST_REL_DIR . '/' . str_replace('.yaml', '.json', $yaml_file);
+			$outdir = dirname($outfile);
+			if (!is_dir($outdir)) {
+				mkdir($outdir, 0755, true);
+			}
+			convert_file($yaml_file, $outfile);
+		}
+	}
 }
 
 main();
