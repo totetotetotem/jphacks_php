@@ -21,5 +21,23 @@ $app->group('/user', function () {
 				'family' => $family->format_as_response()];
 		});
 		return get_renderer()->render($response, $data);
-	})->add(new RequestValidateMiddleware(null, true));
+	})->add(new RequestValidateMiddleware());
+
+	$this->post('/connect', function (ServerRequestInterface $request, ResponseInterface $response, $args) {
+		$family = \ORM\FamilyQuery::create()
+			->filterByToken($request->getParsedBody()['family']['token'])
+			->findOne();
+		if ($family === null) {
+			return get_renderer()->renderAsError($response, 400, 'Bad request', 'invalid token');
+		}
+
+		$user = new \ORM\User();
+		$user->setAccessToken(sha1(mt_rand() . uniqid(gethostname(), true)))
+			->setFamilyId($family->getFamilyId())
+			->save();
+
+		return get_renderer()->render($response, [
+			'user' => $user->format_as_response(),
+			'family' => $family->format_as_response()]);
+	})->add(new RequestValidateMiddleware());
 });
