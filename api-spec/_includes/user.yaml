@@ -1,4 +1,5 @@
 user:
   +db_fields:
+    - user_id
     - access_token
     - family_id
