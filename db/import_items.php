@@ -1,7 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../vendor/autoload.php';
-require_once __DIR__ . 'generated-conf/config.php';
+require_once __DIR__ . '/generated-conf/config.php';
 $fp = fopen('php://stdin', 'r');
 
 while (($buf = fgets($fp)) !== false) {
