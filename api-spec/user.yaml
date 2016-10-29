@@ -1,0 +1,4 @@
+input: []
+output:
+  user:
+    +include: user.yaml

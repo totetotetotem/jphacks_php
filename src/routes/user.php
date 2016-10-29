@@ -1,10 +1,18 @@
 <?php
 
+use middleware\AuthMiddleware;
 use middleware\RequestValidateMiddleware;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 $app->group('/user', function () {
+	$this->get('', function (ServerRequestInterface $request, ResponseInterface $response, $args) {
+		/** @var \ORM\User $user */
+		$user = $request->getAttribute('user');
+
+		return get_renderer()->render($response, ['user' => $user->format_as_response()]);
+	})->add(new AuthMiddleware())->add(new RequestValidateMiddleware(null, false));
+
 	$this->post('/add', function (ServerRequestInterface $request, ResponseInterface $response, $args) {
 		$data = transaction(function () {
 			$family = new \ORM\Family();

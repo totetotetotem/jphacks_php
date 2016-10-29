@@ -37,40 +37,43 @@ class RequestValidateMiddleware
 		}
 
 		$schema = json_decode(file_get_contents($schema_file));
-		// objectじゃないとvalidatorが通らないの悲しい
-		$data = json_decode($request->getBody());
+		if ($request->getMethod() !== 'GET') {
+			// objectじゃないとvalidatorが通らないの悲しい
+			$data = json_decode($request->getBody());
 
-		if ($data === null) {
-			return get_renderer()->renderAsError($response, 400, 'Invalid request', 'malformed json');
+			if ($data === null) {
+				return get_renderer()->renderAsError($response, 400, 'Invalid request', 'malformed json');
+			}
+
+			$validator = new Validator();
+			$validator->check($data, $schema->input);
+			if (!$validator->isValid()) {
+				$extra = [];
+				foreach ($validator->getErrors() as $error) {
+					$extra[] = sprintf('[%s] %s', $error['property'], $error['message']);
+				}
+				return get_renderer()->renderAsError($response, 400, 'Invalid request', 'input validation failed', $extra);
+			}
 		}
 
-		$validator = new Validator();
-		$validator->check($data, $schema->input);
-		if ($validator->isValid()) {
-			/** @var ResponseInterface $real_response */
-			$real_response = $next($request, $response);
-			if ($this->check_out) {
-				$real_body = $real_response->getBody();
-				$real_body->rewind();
-				$validator->check(json_decode($real_body->getContents()), $schema->output);
-				if ($validator->isValid()) {
-					return $real_response;
-				} else {
-					$extra = [];
-					foreach ($validator->getErrors() as $error) {
-						$extra[] = sprintf('[%s] %s', $error['property'], $error['message']);
-					}
-					return get_renderer()->renderAsError($response, 500, 'Invalid request', 'output validation failed', $extra);
-				}
-			} else {
-				return $real_response;
-			}
+		/** @var ResponseInterface $real_response */
+		$real_response = $next($request, $response);
+		if (!$this->check_out) {
+			return $real_response;
 		} else {
-			$extra = [];
-			foreach ($validator->getErrors() as $error) {
-				$extra[] = sprintf('[%s] %s', $error['property'], $error['message']);
+			$real_body = $real_response->getBody();
+			$real_body->rewind();
+			$validator = new Validator();
+			$validator->check(json_decode($real_body->getContents()), $schema->output);
+			if ($validator->isValid()) {
+				return $real_response;
+			} else {
+				$extra = [];
+				foreach ($validator->getErrors() as $error) {
+					$extra[] = sprintf('[%s] %s', $error['property'], $error['message']);
+				}
+				return get_renderer()->renderAsError($response, 500, 'Invalid request', 'output validation failed', $extra);
 			}
-			return get_renderer()->renderAsError($response, 400, 'Invalid request', 'input validation failed', $extra);
 		}
 	}
 }
