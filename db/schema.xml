@@ -20,11 +20,27 @@
 			<reference local="family_id" foreign="family_id"/>
 		</foreign-key>
 	</table>
-	<table name="item">
-		<column name="item_id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
+	<table name="user_item">
+		<column name="user_item_id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
 		<column name="family_id" type="integer" required="true"/>
+		<column name="item_id" type="integer" required="true"/>
 		<foreign-key foreignTable="family">
 			<reference local="family_id" foreign="family_id"/>
 		</foreign-key>
+		<foreign-key foreignTable="item_master">
+			<reference local="item_id" foreign="item_id"/>
+		</foreign-key>
+	</table>
+	<table name="item_master">
+		<column name="item_id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
+		<column name="item_name" type="varchar" required="true">
+			<vendor type="mysql">
+				<parameter name="Collate" value="utf8_unicode_ci"/>
+			</vendor>
+		</column>
+		<column name="default_expire_days" type="integer"/>
+		<index>
+			<index-column name="item_name"/>
+		</index>
 	</table>
 </database>

@@ -2,10 +2,10 @@
 
 namespace ORM;
 
-use ORM\Base\Item as BaseItem;
+use ORM\Base\ItemMasterQuery as BaseItemMasterQuery;
 
 /**
- * Skeleton subclass for representing a row from the 'item' table.
+ * Skeleton subclass for performing query and update operations on the 'item_master' table.
  *
  *
  *
@@ -14,7 +14,7 @@ use ORM\Base\Item as BaseItem;
  * long as it does not already exist in the output directory.
  *
  */
-class Item extends BaseItem
+class ItemMasterQuery extends BaseItemMasterQuery
 {
 
 }
