@@ -53,4 +53,4 @@ $app->post('/item/{itemId}/dec', function (ServerRequestInterface $request, Resp
     });
 
     return  get_renderer()->render($response);
-}
+});
