@@ -19,7 +19,7 @@ class Family extends BaseFamily
 	public function format_as_response()
 	{
 		return [
-			'family_id' => $this->getFamilyId(),
+			//'family_id' => $this->getFamilyId(),
 			'token' => $this->getToken()];
 	}
 }
