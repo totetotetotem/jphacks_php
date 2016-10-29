@@ -28,12 +28,13 @@ class RequestValidateMiddleware
 	 */
 	public function __invoke($request, $response, $next)
 	{
-		$request_target = $this->yaml_path ?? $request->getRequestTarget();
+		$request_target = $this->yaml_path ?? explode('?', $request->getRequestTarget())[0];
 		$schema_file = APP_ROOT_PATH . '/generated-api-schema/' . $request_target . '.json';
 		$response = $response->withHeader('Content-Type', 'application/json;charset=utf-8');
 		if (!file_exists($schema_file)) {
 			// エラー出力
-			return get_renderer()->renderAsError($response, 404, 'Invalid API endpoint', 'no spec');
+			// 結局これでもパラメータがuriに含まれる時に死んでしまうのでどうしようか
+			//return get_renderer()->renderAsError($response, 404, 'Invalid API endpoint', 'no spec', $schema_file);
 		}
 
 		$schema = json_decode(file_get_contents($schema_file));
