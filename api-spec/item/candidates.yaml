@@ -1,0 +1,13 @@
+input:
+  query:
+    +fields:
+      name:
+        array: true
+        type: string
+output:
+  item_master:
+    array: true
+    +include: item_master.yaml
+    +fields:
+      original_name:
+        type: string
