@@ -23,7 +23,7 @@
 	<table name="user_item">
 		<column name="user_item_id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
 		<column name="family_id" type="integer" required="true"/>
-		<column name="item_id" type="integer" required="true"/>
+		<column name="item_id" type="integer" required="false"/>
 		<column name="item_name" type="varchar" size="255" required="true"/>
 		<column name="expire_date" type="timestamp" required="true"/>
 		<foreign-key foreignTable="family">
