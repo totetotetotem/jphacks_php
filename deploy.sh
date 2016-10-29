@@ -7,6 +7,7 @@ php composer.phar install
 (cd db; ../vendor/bin/propel migration:migrate) && \
 (cd db; ../vendor/bin/propel model:build)
 php composer.phar dump-autoload
+php tools/GenerateApiSchema.php
 nginx -s reload
 systemctl restart uthackers_app
 
