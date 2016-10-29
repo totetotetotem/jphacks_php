@@ -1,0 +1,12 @@
+input:
+  user_item:
+    array: true
+    +fields:
+      item_id:
+        type: integer
+        required: false
+      item_name:
+        type: string
+      expire_date:
+        type: date
+output: []

@@ -1,0 +1,6 @@
+# item_master
+item_master:
+  +db_fields:
+    - item_id
+    - item_name
+    - default_expire_days

@@ -18,7 +18,7 @@ return [
 				'fresh_fridge' => [
 					'adapter' => 'mysql',
 					'classname' => 'Propel\Runtime\Connection\ConnectionWrapper',
-					'dsn' => 'mysql:host=localhost;dbname=fresh_fridge',
+					'dsn' => 'mysql:host=localhost;dbname=fresh_fridge;charset=utf8',
 					'user' => 'fresh_fridge',
 					'password' => get_db_password(),
 					'attributes' => []]]],

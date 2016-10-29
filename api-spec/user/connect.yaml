@@ -1,0 +1,10 @@
+input:
+  family:
+    +fields:
+      token:
+        type: string
+output:
+  family:
+    +include: family.yaml
+  user:
+    +include: user.yaml

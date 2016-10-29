@@ -2,10 +2,10 @@
 
 namespace ORM;
 
-use ORM\Base\ItemQuery as BaseItemQuery;
+use ORM\Base\ItemSearch as BaseItemSearch;
 
 /**
- * Skeleton subclass for performing query and update operations on the 'item' table.
+ * Skeleton subclass for representing a row from the 'item_search' table.
  *
  *
  *
@@ -14,7 +14,7 @@ use ORM\Base\ItemQuery as BaseItemQuery;
  * long as it does not already exist in the output directory.
  *
  */
-class ItemQuery extends BaseItemQuery
+class ItemSearch extends BaseItemSearch
 {
 
 }
