@@ -49,7 +49,7 @@
 			</vendor>
 		</column>
 		<index>
-			<index-column name="word"/>
+			<index-column name="search_word"/>
 		</index>
 		<foreign-key foreignTable="item_master">
 			<reference local="item_id" foreign="item_id"/>
