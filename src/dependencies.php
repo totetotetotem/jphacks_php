@@ -56,6 +56,17 @@ $container['errorHandler'] = function ($c) {
 	};
 };
 
+$container['phpErrorHandler'] = function ($c) {
+	return function ($request, $response, $exception) use ($c) {
+		/** @var \Monolog\Logger $logger */
+		$logger = get_logger_from_container($c);
+		$logger->error('PHPErrorHandler');
+		show_exception($logger, $exception);
+		return get_renderer()->renderAsError($response, 500, 'Server Error', 'error occurred',
+			['error_id' => get_logger_uid_processor()->getUid()]);
+	};
+};
+
 $container['notFoundHandler'] = function ($c) {
 	return function ($request, $response) use ($c) {
 		/** @var \Psr\Http\Message\ResponseInterface $res */
