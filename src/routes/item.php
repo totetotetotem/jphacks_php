@@ -37,8 +37,25 @@ $app->group('/item', function () {
 		return get_renderer()->render($response, ['user_item' => format_as_response($items)]);
 	})->add(new RequestValidateMiddleware())->add(new AuthMiddleware());
 
+	$this->post('/add', function (ServerRequestInterface $request, ResponseInterface $response, $args) {
+		/** @var \ORM\User $user */
+		$user = $request->getAttribute('user');
 
+		$items = $request->getParsedBody()['user_item'];
 
+		transaction(function () use ($items, $user) {
+			foreach ($items as $item) {
+				$user_item = new \ORM\UserItem();
+				$user_item->setFamilyId($user->getUserId())
+					->setExpireDate($item['expire_date'])
+					->setItemId($item['item_id'])
+					->setItemName($item['item_name'])
+					->save();
+			}
+		});
+
+		return get_renderer()->render($response);
+	})->add(new RequestValidateMiddleware())->add(new AuthMiddleware());
 });
 
 $app->post('/item/{itemId}/dec', function (ServerRequestInterface $request, ResponseInterface $response, $args) {
