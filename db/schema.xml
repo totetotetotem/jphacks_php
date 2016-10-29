@@ -4,6 +4,7 @@
 		  name="fresh_fridge" namespace="ORM">
 	<table name="family">
 		<column name="family_id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
+		<column name="token" type="varchar" size="255" required="true"/>
 	</table>
 	<table name="user">
 		<column name="user_id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
