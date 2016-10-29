@@ -46,7 +46,7 @@ $app->group('/item', function () {
 		transaction(function () use ($items, $user) {
 			foreach ($items as $item) {
 				$user_item = new \ORM\UserItem();
-				$user_item->setFamilyId($user->getUserId())
+				$user_item->setFamilyId($user->getFamilyId())
 					->setExpireDate($item['expire_date'])
 					->setItemId($item['item_id'])
 					->setItemName($item['item_name'])
