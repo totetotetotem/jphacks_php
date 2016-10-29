@@ -1,0 +1,5 @@
+input:
+  user_item_id:
+    array: true
+    type: integer
+output: []

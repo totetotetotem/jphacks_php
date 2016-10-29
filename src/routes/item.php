@@ -56,19 +56,24 @@ $app->group('/item', function () {
 
 		return get_renderer()->render($response);
 	})->add(new RequestValidateMiddleware())->add(new AuthMiddleware());
-});
 
-$app->post('/item/{itemId}/dec', function (ServerRequestInterface $request, ResponseInterface $response, $args) {
-    //TODO トークンと比較してきちんとユーザー確かめる
-    //TODO ひとつずつのデクリメントじゃなくて、クライアントでちょっとは蓄えてからポストしてまとめて減らす
-    transaction(function() {
-	/*
-	$item = \ORM\ItemQuery::create()->filterByItemId((int)$args['itemId'])->findPk(1);
-        $data = (int)$item->getCountOfItem()
-        $item->setCountOfItem((string)($data - 1))
-             ->save();
-	*/
-    });
+	$this->post('/delete', function (ServerRequestInterface $request, ResponseInterface $response, $args) {
+		/** @var \ORM\User $user */
+		$user = $request->getAttribute('user');
 
-    return  get_renderer()->render($response);
+		$ids = $request->getParsedBody()['user_item_id'];
+
+		$deleted_rows = transaction(function () use ($ids, $user) {
+			return \ORM\UserItemQuery::create()
+				->filterByUserItemId($ids, \ORM\UserItemQuery::IN)
+				->filterByFamilyId($user->getFamilyId())
+				->delete();
+		});
+
+		if ($deleted_rows === 0) {
+			return get_renderer()->renderAsError($response, 422, 'Unprocessable Entity', 'valid user_item_id is not found');
+		} else {
+			return get_renderer()->render($response);
+		}
+	})->add(new RequestValidateMiddleware(null, false))->add(new AuthMiddleware());
 });
