@@ -1,5 +1,7 @@
 <?php
 
+use middleware\AuthMiddleware;
+use middleware\RequestValidateMiddleware;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -21,23 +23,22 @@ $app->group('/item', function () {
 			}
 		}
 
-		get_renderer()->render($response, ['item_master' => $data]);
-	})->add(new \middleware\RequestValidateMiddleware());
-});
+		return get_renderer()->render($response, ['item_master' => $data]);
+	})->add(new RequestValidateMiddleware());
 
-$app->get('/item/{familyId}', function (ServerRequestInterface $request, ResponseInterface $response, $args) {
-    //TODO decほどじゃないけどトークンを比較すべき
+	$this->get('/list', function (ServerRequestInterface $request, ResponseInterface $response, $args) {
+		/** @var \ORM\User $user */
+		$user = $request->getAttribute('user');
 
-    $family = \ORM\FamilyQuery::create()->filterByFamilyId((int)$args['familyId'])->findPk(1);
+		$items = \ORM\UserItemQuery::create()
+			->filterByFamilyId($user->getFamilyId())
+			->find();
 
-    $query = \ORM\ItemQuery::create()
-            ->orderByExpireDate();
+		return get_renderer()->render($response, ['user_item' => format_as_response($items)]);
+	})->add(new RequestValidateMiddleware())->add(new AuthMiddleware());
 
-    $items = $family->getItems($query);
 
-    $json = $items->toJson();
 
-    return $response->getBody()->write($json);
 });
 
 $app->post('/item/{itemId}/dec', function (ServerRequestInterface $request, ResponseInterface $response, $args) {

@@ -16,5 +16,12 @@ use ORM\Base\UserItem as BaseUserItem;
  */
 class UserItem extends BaseUserItem
 {
-
+	public function format_as_response()
+	{
+		return [
+			'user_item_id' => $this->getUserItemId(),
+			'item_id' => $this->getItemId(),
+			'item_name' => $this->getItemName(),
+			'expire_date' => $this->getExpireDate('Y-m-d')];
+	}
 }
