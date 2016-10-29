@@ -2,3 +2,5 @@ input: []
 output:
   user:
     +include: user.yaml
+  family:
+    +include: family.yaml

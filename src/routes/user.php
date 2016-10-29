@@ -10,8 +10,10 @@ $app->group('/user', function () {
 		/** @var \ORM\User $user */
 		$user = $request->getAttribute('user');
 
-		return get_renderer()->render($response, ['user' => $user->format_as_response()]);
-	})->add(new AuthMiddleware())->add(new RequestValidateMiddleware(null, false));
+		return get_renderer()->render($response, [
+			'user' => $user->format_as_response(),
+			'family' => $user->getFamily()->format_as_response()]);
+	})->add(new AuthMiddleware())->add(new RequestValidateMiddleware());
 
 	$this->post('/add', function (ServerRequestInterface $request, ResponseInterface $response, $args) {
 		$data = transaction(function () {
