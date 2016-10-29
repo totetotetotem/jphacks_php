@@ -9,6 +9,7 @@
 		<column name="user_id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
 		<column name="family_id" type="integer" required="true"/>
 		<column name="access_token" type="varchar" size="255" required="true"/>
+        <column name="line_id" type="varchar" size="64" />
 		<unique>
 			<unique-column name="access_token"/>
 		</unique>
