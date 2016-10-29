@@ -9,6 +9,11 @@
             "name": "totetotetotem",
             "email": "invalid@invalid.domain",
             "homepage": "https://invalid.domain"
+        },
+        {
+            "name": "Turenar",
+            "email": "snswinhaiku.lo@gmail.com",
+            "homepage": "https://github.com/turenar"
         }
     ],
     "require": {
@@ -20,21 +25,14 @@
         "propel/propel": "~2.0@dev"
     },
     "require-dev": {
-        "phpunit/phpunit": ">=4.8 < 6.0"
     },
     "autoload": {
         "psr-0": {
             "ORM\\": "db/generated-classes"
         }
     },
-    "autoload-dev": {
-        "psr-4": {
-            "Tests\\": "tests/"
-        }
-    },
 	"scripts": {
-        "start": "php -S 0.0.0.0:8080 -t public public/index.php",
-        "test": "phpunit"
+        "start": "php -S 0.0.0.0:8080 -t public public/index.php"
 	}
 
 }
