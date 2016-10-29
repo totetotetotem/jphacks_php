@@ -75,5 +75,5 @@ $app->group('/item', function () {
 		} else {
 			return get_renderer()->render($response);
 		}
-	})->add(new RequestValidateMiddleware(null, false))->add(new AuthMiddleware());
+	})->add(new RequestValidateMiddleware())->add(new AuthMiddleware());
 });
