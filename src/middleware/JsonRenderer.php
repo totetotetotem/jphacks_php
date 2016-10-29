@@ -2,6 +2,7 @@
 namespace middleware;
 
 use Psr\Http\Message\ResponseInterface;
+use Slim\Http\Body;
 
 /**
  * Class JsonRenderer
@@ -52,7 +53,8 @@ class JsonRenderer
 			$data['meta']['extra'] = $extra;
 		}
 
-		$response->getBody()->write(json_encode($data));
-		return $response;
+		$body = new Body(fopen('php://temp', 'r+'));
+		$body->write(json_encode($data));
+		return $response->withBody($body);
 	}
 }
