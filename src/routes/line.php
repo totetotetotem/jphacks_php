@@ -20,6 +20,7 @@ $app->post('/line', function($request, $response, $args) {
 		foreach ($json_object->events as $event) {
 			$token = $event->replyToken;
 
+			$post = null;
 			$this->logger->addDebug("token" . $token);
 			if ($event->type === 'message') {
 				$post = array(
@@ -94,6 +95,8 @@ $app->post('/line', function($request, $response, $args) {
 							)
 						)
 					);
+				} else {
+					$post = null;
 				}
 			}
 
@@ -115,17 +118,19 @@ $app->post('/line', function($request, $response, $args) {
 				);
 			}
 
-			$this->logger->addDebug("post" . implode($post));
+			if ($post !== null) {
+				$this->logger->addDebug("post" . implode($post));
 
-			$curl = curl_init($url);
-			curl_setopt($curl, CURLOPT_POST, true);
-			curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-			curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($post));
-			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-			$result = curl_exec($curl);
-			curl_close($curl);
+				$curl = curl_init($url);
+				curl_setopt($curl, CURLOPT_POST, true);
+				curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+				curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($post));
+				curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+				$result = curl_exec($curl);
+				curl_close($curl);
 
-			$this->logger->addDebug("result" . $result);
+				$this->logger->addDebug("result" . $result);
+			}
 
 			$data = [
 				"status" => "OK",
