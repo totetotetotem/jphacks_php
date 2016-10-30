@@ -33,12 +33,12 @@ $app->post('/line', function($request, $response, $args) {
                     );
         }
 
-        var_dump($event);
+	        $this->logger->addDebug($event);
         if($event->source->type === 'group' && strpos($event->message->text, 'familytoken') !== false) {
             $redis = new Redis();
             $redis->connect("127.0.0.1", 6379);
             $value = $redis->lRange('familyTokens', 0, -1);
-            var_dump($value);
+            $this->logger->debug($value);
             foreach ($value as $id) {
                 if($id === $event->source->groupId) { 
                     $familyToken = explode(':', $event->message->text)[1];
@@ -73,32 +73,33 @@ $app->post('/line', function($request, $response, $args) {
         }
 
         if($event->type === 'beacon') {
-            $lineId = $event->source->userId;
-            $this->logger->addDebug("lineId".$lineId);
-            $user = \ORM\UserQuery::create()->filterByLineId($lineId)->findOne();
-            $item = \ORM\UserItemQuery::create()
-                ->filterByFamilyId((int)$user->getFamilyId())
-                ->orderByExpireDate()
-                ->findOne();
+	        $lineId = $event->source->userId;
+	        $this->logger->addDebug("lineId" . $lineId);
+	        $user = \ORM\UserQuery::create()->filterByLineId($lineId)->findOne();
+	        $item = \ORM\UserItemQuery::create()
+		        ->filterByFamilyId((int)$user->getFamilyId())
+		        ->orderByExpireDate()
+		        ->findOne();
 
+	        if ($item !== null) {
+		        $this->logger->addDebug("item" . $item->getItemName());
+		        $message_text = 'expire date of ' . $item->getItemName() . ' is ' . $item->getExpireDate()->format('Y-m-d');
+		        $this->logger->addDebug("messages" . $message_text);
 
-            $this->logger->addDebug("item".$item->getItemName());
-            $message_text = 'expire date of '.$item->getItemName().' is '.$item->getExpireDate()->format('Y-m-d');
-            $this->logger->addDebug("messages".$message_text);
-
-            $post = array(
-                    'replyToken' => $token,
-                    'messages' => array(
-                        array(
-                            'type' => 'text',
-                            'text' => $message_text
-                            )
-                        )
-                    );
+		        $post = array(
+			        'replyToken' => $token,
+			        'messages' => array(
+				        array(
+					        'type' => 'text',
+					        'text' => $message_text
+				        )
+			        )
+		        );
+	        }
         }
 
         if($event->type === 'join') {
-            var_dump($event);
+	        $this->logger->debug($event);
             $redis = new Redis();
             $redis->connect("127.0.0.1", 6379);
 
