@@ -16,5 +16,12 @@ use ORM\Base\User as BaseUser;
  */
 class User extends BaseUser
 {
-
+	public function format_as_response()
+	{
+		return [
+//			'user_id' => $this->getUserId(),
+			'access_token' => $this->getAccessToken(),
+//			'family_id' => $this->getFamilyId()
+        ];
+	}
 }

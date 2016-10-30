@@ -1,4 +1,5 @@
 <?php
+namespace middleware;
 
 class AuthMiddleware
 {
@@ -18,7 +19,6 @@ class AuthMiddleware
 			->filterByAccessToken($access_token)
 			->findOne();
 		if ($user === null) {
-			$output = $response->getBody();
 			return get_renderer()->renderAsError($response, 403, 'Access denied', 'invalid token');
 		}
 		$request = $request->withAttribute('user', $user);

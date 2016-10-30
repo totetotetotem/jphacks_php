@@ -1,0 +1,6 @@
+user_item:
+  +db_fields:
+    - user_item_id
+    - item_id
+    - item_name
+    - expire_date

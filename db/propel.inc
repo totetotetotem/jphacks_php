@@ -1,4 +1,16 @@
 <?php
+if (!defined('PROPEL_INC_INCLUDED_AB58D2CA')) {
+	define('PROPEL_INC_INCLUDED_AB58D2CA', true);
+	function get_db_password()
+	{
+		if (file_exists(__DIR__ . '/../../password.inc')) {
+			include_once __DIR__ . '/../../password.inc';
+			return DB_PASSWORD;
+		} else {
+			return 'a+cvL~.R/4lkj~44';
+		}
+	}
+}
 return [
 	'propel' => [
 		'database' => [
@@ -6,9 +18,9 @@ return [
 				'fresh_fridge' => [
 					'adapter' => 'mysql',
 					'classname' => 'Propel\Runtime\Connection\ConnectionWrapper',
-					'dsn' => 'mysql:host=localhost;dbname=fresh_fridge',
+					'dsn' => 'mysql:host=localhost;dbname=fresh_fridge;charset=utf8',
 					'user' => 'fresh_fridge',
-					'password' => 'a+cvL~.R/4lkj~44',
+					'password' => get_db_password(),
 					'attributes' => []]]],
 		'runtime' => [
 			'defaultConnection' => 'fresh_fridge',
