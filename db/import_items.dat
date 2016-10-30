@@ -69,7 +69,7 @@
 ナマコ&なまこ&&Sea cucumber&Pig&&2
 ニンジン&にんじん&人参&&carrot&Carrot&&21
 ニンニク&にんにく&大蒜&&garlic&Garlic&&2
-ネギ&ナガネギ&ねぎ&ながねぎ&葱&&Green onion&Onions&Green onions&Onions&&7
+ネギ&ナガネギ&ねぎ&ながねぎ&長ねぎ&葱&&Green onion&Onions&Green onions&Onions&&7
 パイナップル&ぱいなっぷる&&pineapple&Pineapple&&4
 パクチー&ぱくちー&&Coriander&Fresh coriander&&10
 パセリ&ぱせり&&parsley&Parsley&&10
@@ -123,3 +123,5 @@
 しめじ&& &&5
 まいたけ&舞茸&& &&5
 豆腐&豆富&とうふ&& &&5
+白菜&はくさい&& &&5
+しらたき&白滝&& &&60
