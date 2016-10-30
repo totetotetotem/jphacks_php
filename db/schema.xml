@@ -28,6 +28,10 @@
 		<column name="item_id" type="integer" required="false"/>
 		<column name="item_name" type="varchar" size="255" required="true"/>
 		<column name="expire_date" type="timestamp" required="true"/>
+		<index>
+			<index-column name="family_id"/>
+			<index-column name="expire_date"/>
+		</index>
 		<foreign-key foreignTable="family">
 			<reference local="family_id" foreign="family_id"/>
 		</foreign-key>
