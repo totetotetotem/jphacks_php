@@ -101,7 +101,7 @@ $app->post('/line', function($request, $response, $args) {
 			}
 
 			if ($event->type === 'join') {
-				$this->logger->debug($event);
+//				$this->logger->debug($event);
 				$redis = new Redis();
 				$redis->connect("127.0.0.1", 6379);
 
