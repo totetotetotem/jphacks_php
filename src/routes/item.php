@@ -43,7 +43,8 @@ $app->group('/item', function () {
 
 		$items = $request->getParsedBody()['user_item'];
 
-		transaction(function () use ($items, $user) {
+		$ret = transaction(function () use ($items, $user) {
+			$data = [];
 			foreach ($items as $item) {
 				$user_item = new \ORM\UserItem();
 				$user_item->setFamilyId($user->getFamilyId())
@@ -51,10 +52,12 @@ $app->group('/item', function () {
 					->setItemId($item['item_id'])
 					->setItemName($item['item_name'])
 					->save();
+				$data[] = $user_item->format_as_response();
 			}
+			return ['user_item' => $data];
 		});
 
-		return get_renderer()->render($response);
+		return get_renderer()->render($response, $ret);
 	})->add(new RequestValidateMiddleware())->add(new AuthMiddleware());
 
 	$this->post('/delete', function (ServerRequestInterface $request, ResponseInterface $response, $args) {

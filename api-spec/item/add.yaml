@@ -9,4 +9,7 @@ input:
         type: string
       expire_date:
         type: date
-output: []
+output:
+  user_item:
+    array: true
+    +include: user_item.yaml
