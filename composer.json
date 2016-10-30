@@ -18,7 +18,8 @@
     ],
     "require": {
         "php": ">=7.0",
-        "ext-yaml": "*",
+        "ext-yaml": "^2.0",
+        "ext-pdo": "^7.0",
         "slim/slim": "^3.1",
         "monolog/monolog": "^1.17",
         "justinrainbow/json-schema": "~2.0",
