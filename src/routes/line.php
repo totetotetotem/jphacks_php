@@ -62,7 +62,7 @@ $app->post('/line', function($request, $response, $args) {
             $lineId = $event->source->userId;
             $this->logger->addDebug("lineId".$lineId);
             $user = \ORM\UserQuery::create()->filterByLineId($lineId)->findOne();
-            $item = \ORM\ItemQuery::create()
+            $item = \ORM\UserItemQuery::create()
                 ->filterByFamilyId((int)$user->getFamilyId())
                 ->orderByExpireDate()
                 ->findOne();
