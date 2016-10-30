@@ -20,10 +20,48 @@ $app->post('/line', function($request, $response, $args) {
                 )
             );
 
+        $this->logger->addDebug("token".$token);
+        if($event->type === 'message') {
+            $post = array(
+                    'replyToken' => $token,
+                    'messages' => array(
+                        array(
+                            'type' => 'text',
+                            'text' => $event->source->userId
+                            )
+                        )
+                    );
+        }
+        if($event->source->type === 'room' && strpos($event->message->text, 'familytoken') !== false) {
+            $redis = new Redis();
+            $redis.connect("127.0.0.1", 6379);
+            $value = $redis->lRange('familyTokens', 0, -1);
+            foreach ($value as $id) {
+                if($id === $event->source->roomId) { 
+                    $familyToken = explode(':', $event->message->text)[1];
+                    /*
+                    $family = \ORM\FamilyQuery()::create()->filterByToken($familyToken);
+                    $family->setLineRoomId($id);
+                    $family->save();
+                        */
+                    $post = array(
+                            'replyToken' => $token,
+                            'messages' => array(
+                                array(
+                                    'type' => 'text',
+                                    'text' => 'アプリとの連携を設定しました'
+                                    )
+                                )
+                            );
+                    break;
+                }
+            }
+        }
 
         if($event->type === 'beacon') {
-            $userId = $event->source->userId;
-            $user = \ORM\UserQuery::create()->findByLineId($userId)->findPk(1);
+            $lineId = $event->source->userId;
+            $this->logger->addDebug("lineId".$lineId);
+            $user = \ORM\UserQuery::create()->filterByLineId($lineId)->findOne();
             $item = \ORM\ItemQuery::create()
                 ->findByUserId($user->getUserId())
                 ->orderByExpireDate()
@@ -38,6 +76,26 @@ $app->post('/line', function($request, $response, $args) {
             );
         }
 
+        if($event->type == 'join') {
+            $redis = new Redis();
+            $redis.connect("127.0.0.1", 6379);
+
+            $redis.rPush('familyTokens', $event->source->roomId);
+            
+            $post = array(
+                'replyToken' => $token,
+                'messages' => array(
+                    array(
+                        'type' => 'text',
+                        'text' => 'Lineがアプリと連携するために、アプリを操作してアクセストークンをこのチャンネルに入力してください'
+                        )
+                    )
+                );
+        }
+
+
+        $this->logger->addDebug("post".implode($post));
+        
         $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_POST, true);
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
