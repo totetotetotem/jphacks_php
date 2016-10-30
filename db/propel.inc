@@ -1,4 +1,6 @@
 <?php
+
+// レポジトリの親ディレクトリにpassword.incを保管することで、データベース接続に必要なパスワードが変えられる。
 if (!defined('PROPEL_INC_INCLUDED_AB58D2CA')) {
 	define('PROPEL_INC_INCLUDED_AB58D2CA', true);
 	function get_db_password()

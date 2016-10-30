@@ -4,16 +4,24 @@ namespace middleware;
 use JsonSchema\Validator;
 use Psr\Http\Message\ResponseInterface;
 
+/**
+ * リクエストおよびレスポンスをjson-schemaを使用してvalidateする。
+ *
+ * tools/GenerateApiSchema.phpを使用してyamlファイルからjson-schemaを生成する。
+ * @package middleware
+ */
 class RequestValidateMiddleware
 {
 	/**
 	 * RequestValidateMiddleware constructor.
-	 * @param string|null $yaml_path チェック用のyamlファイルパス (generated-api-schemaから相対パス)
-	 * @param bool $check_out 出力をチェックするかどうか
+	 * @param string|null $json_name
+	 *   チェック用のyamlファイルパス (generated-api-schemaから.yamlを除いた相対パス)。
+	 *   nullの場合は、リクエストパスを使用する。
+	 * @param bool $check_out 出力をチェックするかどうか (デバッグ用、trueを強く推奨)
 	 */
-	public function __construct($yaml_path = null, $check_out = true)
+	public function __construct($json_name = null, $check_out = true)
 	{
-		$this->yaml_path = $yaml_path;
+		$this->yaml_path = $json_name;
 		$this->check_out = $check_out;
 	}
 
@@ -34,7 +42,6 @@ class RequestValidateMiddleware
 
 		if (!file_exists($schema_file)) {
 			// エラー出力
-			// 結局これでもパラメータがuriに含まれる時に死んでしまうのでどうしようか
 			return get_renderer()->renderAsError($response, 404, 'Invalid API endpoint', 'no spec', $schema_file);
 		}
 

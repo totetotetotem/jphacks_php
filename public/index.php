@@ -11,7 +11,7 @@ if (PHP_SAPI == 'cli-server') {
 
 require __DIR__ . '/../vendor/autoload.php';
 
-session_start();
+// session_start();
 
 define('APP_ROOT_PATH', __DIR__ . '/..');
 

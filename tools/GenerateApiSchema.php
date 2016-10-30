@@ -1,5 +1,9 @@
 <?php
 
+/*
+ * api-spec/**.yamlからjson schemaを生成しgenerated-api-schema/に保存する
+ */
+
 define('PROJECT_DIR', __DIR__ . '/..');
 define('SPEC_DIR', PROJECT_DIR . '/api-spec');
 define('DEST_REL_DIR', '../generated-api-schema');
