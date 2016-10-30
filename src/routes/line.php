@@ -21,7 +21,7 @@ $app->post('/line', function($request, $response, $args) {
         $token = $event->replyToken;
 
         $this->logger->addDebug("token".$token);
-        if($event->type == 'message') {
+        if($event->type === 'message') {
             $post = array(
                     'replyToken' => $token,
                     'messages' => array(
@@ -32,18 +32,32 @@ $app->post('/line', function($request, $response, $args) {
                         )
                     );
         }
-        if($event->source->type === 'room' && strpos($event->message->text, 'familytoken') !== false) {
+
+        var_dump($event);
+        if($event->source->type === 'group' && strpos($event->message->text, 'familytoken') !== false) {
             $redis = new Redis();
-            $redis.connect("127.0.0.1", 6379);
+            $redis->connect("127.0.0.1", 6379);
             $value = $redis->lRange('familyTokens', 0, -1);
+            var_dump($value);
             foreach ($value as $id) {
-                if($id === $event->source->roomId) { 
+                if($id === $event->source->groupId) { 
                     $familyToken = explode(':', $event->message->text)[1];
-                    /*
-                       $family = \ORM\FamilyQuery()::create()->filterByToken($familyToken);
-                       $family->setLineRoomId($id);
-                       $family->save();
-                     */
+                    $family = \ORM\FamilyQuery::create()->filterByToken($familyToken)->findOne();
+                    if($family === null) {
+                        $post = array(
+                            'replyToken' => $token,
+                            'messages' => array(
+                                array(
+                                    'type' => 'text',
+                                    'text' => 'Invalid Token'
+                                    )
+                                )
+                            );
+                       break; 
+                    }
+                    $family->setRoomId($id);
+                    $family->save();
+                     
                     $post = array(
                             'replyToken' => $token,
                             'messages' => array(
@@ -69,7 +83,7 @@ $app->post('/line', function($request, $response, $args) {
 
 
             $this->logger->addDebug("item".$item->getItemName());
-            $message_text = 'expire date of '.$item->getItemName().'is '.$item->getExpireDate()->format('Y-m-d');
+            $message_text = 'expire date of '.$item->getItemName().' is '.$item->getExpireDate()->format('Y-m-d');
             $this->logger->addDebug("messages".$message_text);
 
             $post = array(
@@ -83,11 +97,12 @@ $app->post('/line', function($request, $response, $args) {
                     );
         }
 
-        if($event->type == 'join') {
+        if($event->type === 'join') {
+            var_dump($event);
             $redis = new Redis();
-            $redis.connect("127.0.0.1", 6379);
+            $redis->connect("127.0.0.1", 6379);
 
-            $redis.rPush('familyTokens', $event->source->roomId);
+            $redis->rPush('familyTokens', $event->source->groupId);
 
             $post = array(
                     'replyToken' => $token,
