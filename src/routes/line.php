@@ -33,7 +33,6 @@ $app->post('/line', function($request, $response, $args) {
 				);
 			}
 
-			$this->logger->addDebug($event);
 			if ($event->source->type === 'group' && strpos($event->message->text, 'familytoken') !== false) {
 				$redis = new Redis();
 				$redis->connect("127.0.0.1", 6379);
