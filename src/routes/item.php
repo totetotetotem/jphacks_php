@@ -26,6 +26,7 @@ $app->group('/item', function () {
 		return get_renderer()->render($response, ['item_master' => $data]);
 	})->add(new RequestValidateMiddleware());
 
+
 	$this->get('/list', function (ServerRequestInterface $request, ResponseInterface $response, $args) {
 		/** @var \ORM\User $user */
 		$user = $request->getAttribute('user');
@@ -36,6 +37,7 @@ $app->group('/item', function () {
 
 		return get_renderer()->render($response, ['user_item' => format_as_response($items)]);
 	})->add(new RequestValidateMiddleware())->add(new AuthMiddleware());
+
 
 	$this->post('/add', function (ServerRequestInterface $request, ResponseInterface $response, $args) {
 		/** @var \ORM\User $user */
@@ -51,6 +53,7 @@ $app->group('/item', function () {
 					->setExpireDate($item['expire_date'])
 					->setItemId($item['item_id'])
 					->setItemName($item['item_name'])
+					->setPrice($item['price'])
 					->save();
 				$data[] = $user_item->format_as_response();
 			}
@@ -59,6 +62,7 @@ $app->group('/item', function () {
 
 		return get_renderer()->render($response, $ret);
 	})->add(new RequestValidateMiddleware())->add(new AuthMiddleware());
+
 
 	$this->post('/delete', function (ServerRequestInterface $request, ResponseInterface $response, $args) {
 		/** @var \ORM\User $user */

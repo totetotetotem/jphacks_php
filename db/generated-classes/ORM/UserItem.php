@@ -22,6 +22,7 @@ class UserItem extends BaseUserItem
 			'user_item_id' => $this->getUserItemId(),
 			'item_id' => $this->getItemId(),
 			'item_name' => $this->getItemName(),
-			'expire_date' => $this->getExpireDate('Y-m-d')];
+			'expire_date' => $this->getExpireDate('Y-m-d'),
+			'price' => $this->getPrice()];
 	}
 }

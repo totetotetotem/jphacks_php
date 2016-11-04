@@ -9,6 +9,8 @@ input:
         type: string
       expire_date:
         type: date
+      price:
+        type: int
 output:
   user_item:
     array: true

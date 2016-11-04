@@ -28,6 +28,7 @@
 		<column name="item_id" type="integer" required="false"/>
 		<column name="item_name" type="varchar" size="255" required="true"/>
 		<column name="expire_date" type="timestamp" required="true"/>
+		<column name="price" type="integer"/>
 		<index>
 			<index-column name="family_id"/>
 			<index-column name="expire_date"/>
