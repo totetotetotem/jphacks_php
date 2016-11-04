@@ -51,9 +51,9 @@ $app->group('/item', function () {
 				$user_item = new \ORM\UserItem();
 				$user_item->setFamilyId($user->getFamilyId())
 					->setExpireDate($item['expire_date'])
-					->setItemId($item['item_id'])
+					->setItemId($item['item_id'] ?? null)
 					->setItemName($item['item_name'])
-					->setPrice($item['price'])
+					->setPrice($item['price'] ?? null)
 					->save();
 				$data[] = $user_item->format_as_response();
 			}
