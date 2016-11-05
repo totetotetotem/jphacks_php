@@ -1,0 +1,11 @@
+[Unit]
+Description = uthackers_app batch push_expire
+
+[Service]
+WorkingDirectory=/home/webapp/jphacks_php
+EnvironmentFile=/home/webapp/env.sh
+ExecStart =/usr/bin/php batch/push_expire.php
+Type = oneshot
+
+[Install]
+WantedBy = multi-user.target
