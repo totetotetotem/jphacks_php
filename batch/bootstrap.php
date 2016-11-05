@@ -25,7 +25,7 @@ function execute(callable $callable)
 	$app->get('/__batch__', $callable);
 	try {
 		$req = new \Slim\Http\Request(
-			'GET', new \Slim\Http\Uri('file', 'localhost', null, '/__batch__'), new \Slim\Http\Headers(), [], [],
+			'GET', new \Slim\Http\Uri('', 'localhost', null, '/__batch__'), new \Slim\Http\Headers(), [], [],
 			new \Slim\Http\RequestBody());
 		$res = new \Slim\Http\Response();
 		$app->process($req, $res);
