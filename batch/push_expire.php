@@ -1,7 +1,7 @@
 <?php
 define('LINE_CHANNEL_ACCESS_TOKEN', getenv('LINE_CHANNEL_ACCESS_TOKEN'));
 define('LINE_API_PUSH_MESSAGE', 'https://api.line.me/v2/bot/message/push');
-
+require_once __DIR__ . '/bootstrap.php';
 
 // loggerとか用意するの面倒なのでバッチをSlimにのっけちゃう……
 execute(function () {
