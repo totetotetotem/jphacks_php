@@ -9,6 +9,8 @@ execute(function () {
 		->setFormatter(\ORM\FamilyQuery::FORMAT_ON_DEMAND)
 		->find();
 	foreach ($families as $family) {
+		$this->logger->debug('sending push', ['fid' => $family->getFamilyId()]);
+		
 		$items = \ORM\UserItemQuery::create()
 			->filterByFamilyId($family->getFamilyId())
 			->filterByExpireDate(['min' => time(), 'max' => time() + 2 * 24 * 60 * 60])
