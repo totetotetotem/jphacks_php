@@ -29,9 +29,11 @@
 		<column name="item_name" type="varchar" size="255" required="true"/>
 		<column name="expire_date" type="timestamp" required="true"/>
 		<column name="price" type="integer"/>
+		<column name="expire_push_done_flag" type="boolean"/>
 		<index>
 			<index-column name="family_id"/>
 			<index-column name="expire_date"/>
+			<index-column name="expire_push_done_flag"/>
 		</index>
 		<foreign-key foreignTable="family">
 			<reference local="family_id" foreign="family_id"/>
