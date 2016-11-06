@@ -9,6 +9,7 @@ php composer.phar install
 php composer.phar dump-autoload -o
 php tools/GenerateApiSchema.php
 nginx -s reload
+systemctl daemon-reload
 systemctl restart uthackers_app
 
 sleep 5s
