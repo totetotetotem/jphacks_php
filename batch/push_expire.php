@@ -30,7 +30,7 @@ execute(function () {
 			}
 			$text .= $item->getItemName();
 		}
-		$query->update(['expire_push_done_flag' => true]);
+		$query->update(['ExpirePushDoneFlag' => true]);
 
 		$post = [
 			'to' => $family->getRoomId(),
