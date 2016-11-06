@@ -36,15 +36,15 @@ execute(function () {
 			'message' => [
 				['type' => 'text', 'text' => $text]]];
 
-		$this->logger->debug('sending push', ['fid' => $family->getFamilyId()]);
-		$curl = curl_init();
+		$this->logger->debug('sending push', ['fid' => $family->getFamilyId(), 'post' => $post]);
+		$curl = curl_init(LINE_CHANNEL_ACCESS_TOKEN);
 		curl_setopt($curl, CURLOPT_POST, true);
 		curl_setopt($curl, CURLOPT_HTTPHEADER, [
 			'Content-Type: application/json',
-			'Authorization:	Bearer ' . LINE_API_PUSH_MESSAGE]);
+			'Authorization:	Bearer ' . LINE_CHANNEL_ACCESS_TOKEN]);
 		curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($post));
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 		$result = curl_exec($curl);
-		$this->logger->debug($result, ['fid' => $family->getFamilyId()]);
+		$this->logger->debug($result, ['fid' => $family->getFamilyId(), 'status' => curl_getinfo($curl, CURLINFO_HTTP_CODE)]);
 	}
 });
