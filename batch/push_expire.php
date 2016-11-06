@@ -23,7 +23,7 @@ execute(function () {
 		$text = '賞味期限が近づいています！: ';
 		foreach ($items as $index => $item) {
 			if ($index >= 5) {
-				$text .= sprintf(' 他%d品', count($items));
+				$text .= sprintf(' 他%d品', count($items) - $index);
 				break;
 			} else if ($index !== 0) {
 				$text .= ', ';
