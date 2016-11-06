@@ -37,7 +37,7 @@ execute(function () {
 				['type' => 'text', 'text' => $text]]];
 
 		$this->logger->debug('sending push', ['fid' => $family->getFamilyId(), 'post' => $post]);
-		$curl = curl_init(LINE_CHANNEL_ACCESS_TOKEN);
+		$curl = curl_init(LINE_API_PUSH_MESSAGE);
 		curl_setopt($curl, CURLOPT_POST, true);
 		curl_setopt($curl, CURLOPT_HTTPHEADER, [
 			'Content-Type: application/json',
