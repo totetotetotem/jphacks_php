@@ -9,11 +9,12 @@ execute(function () {
 		->setFormatter(\ORM\FamilyQuery::FORMAT_ON_DEMAND)
 		->find();
 	foreach ($families as $family) {
-		$this->logger->debug('sending push', ['fid' => $family->getFamilyId()]);
-
+		$today = new DateTime('today');
+		$day_after_tomorrow = new DateTime('+2 day');
+		$day_after_tomorrow->modify('midnight');
 		$items = \ORM\UserItemQuery::create()
 			->filterByFamilyId($family->getFamilyId())
-			->filterByExpireDate(['min' => time(), 'max' => time() + 2 * 24 * 60 * 60])
+			->filterByExpireDate(['min' => $today, 'max' => $day_after_tomorrow])
 			->filterByExpirePushDoneFlag(false)
 			->find();
 		if (count($items) == 0) {
@@ -35,6 +36,7 @@ execute(function () {
 			'message' => [
 				['type' => 'text', 'text' => $text]]];
 
+		$this->logger->debug('sending push', ['fid' => $family->getFamilyId()]);
 		$curl = curl_init();
 		curl_setopt($curl, CURLOPT_POST, true);
 		curl_setopt($curl, CURLOPT_HTTPHEADER, [
