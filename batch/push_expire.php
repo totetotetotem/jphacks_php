@@ -12,11 +12,11 @@ execute(function () {
 		$today = new DateTime('today');
 		$day_after_tomorrow = new DateTime('+2 day');
 		$day_after_tomorrow->modify('midnight');
-		$items = \ORM\UserItemQuery::create()
+		$query = \ORM\UserItemQuery::create()
 			->filterByFamilyId($family->getFamilyId())
 			->filterByExpireDate(['min' => $today, 'max' => $day_after_tomorrow])
-			->filterByExpirePushDoneFlag(false)
-			->find();
+			->filterByExpirePushDoneFlag(false);
+		$items = $query->find();
 		if (count($items) == 0) {
 			continue;
 		}
@@ -30,6 +30,7 @@ execute(function () {
 			}
 			$text .= $item->getItemName();
 		}
+		$query->update(['expire_push_done_flag' => true]);
 
 		$post = [
 			'to' => $family->getRoomId(),
