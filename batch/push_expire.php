@@ -33,7 +33,7 @@ execute(function () {
 
 		$post = [
 			'to' => $family->getRoomId(),
-			'message' => [
+			'messages' => [
 				['type' => 'text', 'text' => $text]]];
 
 		$this->logger->debug('sending push', ['fid' => $family->getFamilyId(), 'post' => $post]);
