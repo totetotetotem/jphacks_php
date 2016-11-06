@@ -119,7 +119,7 @@ $app->post('/line', function($request, $response, $args) {
 			}
 
 			if ($post !== null) {
-				$this->logger->addDebug("post" . implode($post));
+				$this->logger->addDebug("post" . json_encode($post));
 
 				$curl = curl_init($url);
 				curl_setopt($curl, CURLOPT_POST, true);
