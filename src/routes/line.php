@@ -175,3 +175,19 @@ $app->post('/line/user', function (ServerRequestInterface $request, ResponseInte
 
 	return get_renderer()->render($response);
 })->add(new \middleware\AuthMiddleware())->add(new \middleware\RequestValidateMiddleware());
+
+$app->post('/line/user', function (ServerRequestInterface $request, ResponseInterface $response, $args) {
+	$line_group_id_encrypted = $request->getParsedBody()['line_group_id'];
+	$line_group_id = openssl_decrypt($line_group_id_encrypted, CRYPT_METHOD, CRYPT_KEY);
+	if ($line_group_id === FALSE) {
+		return get_renderer()->renderAsError($response, 400, 'Bad Request', 'invalid line_group_id');
+	}
+	/** @var \ORM\User $user */
+	$user = $request->getAttribute('user');
+	$user
+		->getFamily()
+		->setRoomId($line_group_id)
+		->save();
+
+	return get_renderer()->render($response);
+})->add(new \middleware\AuthMiddleware())->add(new \middleware\RequestValidateMiddleware());
