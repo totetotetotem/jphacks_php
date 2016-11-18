@@ -1,5 +1,8 @@
 <?php
 
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+
 define('CRYPT_METHOD', 'AES-128-ECB'); // コピペミスを検知するためだけだが、もっと強いほうがいい？
 define('CRYPT_KEY', getenv('FF_CRYPT_KEY') ?: '~x.SrFBeKu-/v5s;.?K[!K-yUA3y\GVS');
 
@@ -158,4 +161,17 @@ $app->post('/line', function($request, $response, $args) {
 	}
 });
 
+$app->post('/line/user', function (ServerRequestInterface $request, ResponseInterface $response, $args) {
+	$line_user_id_encrypted = $request->getParsedBody()['line_user_id'];
+	$line_user_id = openssl_decrypt($line_user_id_encrypted, CRYPT_METHOD, CRYPT_KEY);
+	if ($line_user_id === FALSE) {
+		return get_renderer()->renderAsError($response, 400, 'Bad Request', 'invalid line_user_id');
+	}
+	/** @var \ORM\User $user */
+	$user = $request->getAttribute('user');
+	$user
+		->setLineId($line_user_id)
+		->save();
 
+	return get_renderer()->render($response);
+})->add(new \middleware\AuthMiddleware())->add(new \middleware\RequestValidateMiddleware());
