@@ -1,5 +1,8 @@
 <?php
 
+define('CRYPT_METHOD', 'AES-128-ECB'); // コピペミスを検知するためだけだが、もっと強いほうがいい？
+define('CRYPT_KEY', getenv('FF_CRYPT_KEY') ?: '~x.SrFBeKu-/v5s;.?K[!K-yUA3y\GVS');
+
 $app->post('/line', function($request, $response, $args) {
 	$url = 'https://api.line.me/v2/bot/message/reply';
 	$channel_access_token = getenv("LINE_CHANNEL_ACCESS_TOKEN");
@@ -101,18 +104,29 @@ $app->post('/line', function($request, $response, $args) {
 			}
 
 			if ($event->type === 'join') {
-//				$this->logger->debug($event);
-				$redis = new Redis();
-				$redis->connect("127.0.0.1", 6379);
-
-				$redis->rPush('familyTokens', $event->source->groupId);
+				$msg = openssl_encrypt($event->source->groupId, CRYPT_METHOD, CRYPT_KEY);
+				$encrypted = $msg;
 
 				$post = array(
 					'replyToken' => $token,
 					'messages' => array(
 						array(
 							'type' => 'text',
-							'text' => 'Lineがアプリと連携するために、アプリを操作してアクセストークンをこのチャンネルに入力してください'
+							'text' => 'このURLからアプリを起動して、LINE連携を完了させてください。 freshfridge://?group_id=' . urlencode($encrypted)
+						)
+					)
+				);
+			}
+			if ($event->type === 'follow') {
+				$msg = openssl_encrypt($event->source->userId, CRYPT_METHOD, CRYPT_KEY);
+				$encrypted = $msg;
+
+				$post = array(
+					'replyToken' => $token,
+					'messages' => array(
+						array(
+							'type' => 'text',
+							'text' => 'このURLからアプリを起動して、LINE連携を完了させてください。 freshfridge://?user_id=' . urlencode($encrypted)
 						)
 					)
 				);
