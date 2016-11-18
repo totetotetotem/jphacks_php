@@ -176,7 +176,7 @@ $app->post('/line/user', function (ServerRequestInterface $request, ResponseInte
 	return get_renderer()->render($response);
 })->add(new \middleware\AuthMiddleware())->add(new \middleware\RequestValidateMiddleware());
 
-$app->post('/line/user', function (ServerRequestInterface $request, ResponseInterface $response, $args) {
+$app->post('/line/group', function (ServerRequestInterface $request, ResponseInterface $response, $args) {
 	$line_group_id_encrypted = $request->getParsedBody()['line_group_id'];
 	$line_group_id = openssl_decrypt($line_group_id_encrypted, CRYPT_METHOD, CRYPT_KEY);
 	if ($line_group_id === FALSE) {
