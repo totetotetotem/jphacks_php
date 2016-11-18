@@ -1,0 +1,5 @@
+input:
+  line_group_id:
+    required: true
+    type: string
+output: []
