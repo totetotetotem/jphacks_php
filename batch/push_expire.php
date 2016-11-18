@@ -9,6 +9,9 @@ execute(function () {
 		->setFormatter(\ORM\FamilyQuery::FORMAT_ON_DEMAND)
 		->find();
 	foreach ($families as $family) {
+		if ($family->getRoomId() === null) {
+			continue;
+		}
 		$today = new DateTime('today');
 		$day_after_tomorrow = new DateTime('+2 day');
 		$day_after_tomorrow->modify('midnight');
