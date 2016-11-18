@@ -1,5 +1,8 @@
 <?php
 
+define('CRYPT_METHOD', 'AES-128-ECB');
+define('CRYPT_KEY', getenv('FF_CRYPT_KEY') ?: '~x.SrFBeKu-/v5s;.?K[!K-yUA3y\GVS');
+
 $app->post('/line', function($request, $response, $args) {
 	$url = 'https://api.line.me/v2/bot/message/reply';
 	$channel_access_token = getenv("LINE_CHANNEL_ACCESS_TOKEN");
@@ -101,18 +104,16 @@ $app->post('/line', function($request, $response, $args) {
 			}
 
 			if ($event->type === 'join') {
-//				$this->logger->debug($event);
-				$redis = new Redis();
-				$redis->connect("127.0.0.1", 6379);
-
-				$redis->rPush('familyTokens', $event->source->groupId);
+				$iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length(CRYPT_METHOD));
+				$msg = openssl_encrypt($event->source->groupId, CRYPT_METHOD, CRYPT_KEY, 0, $iv);
+				$encrypted = sprintf(":1:%s:%s:", base64_encode($iv), $msg);
 
 				$post = array(
 					'replyToken' => $token,
 					'messages' => array(
 						array(
 							'type' => 'text',
-							'text' => 'Lineがアプリと連携するために、アプリを操作してアクセストークンをこのチャンネルに入力してください'
+							'text' => 'このURLからアプリを起動して、LINE連携を完了させてください。 freshfridge://?user_id=' . urlencode($encrypted)
 						)
 					)
 				);
