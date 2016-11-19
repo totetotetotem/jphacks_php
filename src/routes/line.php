@@ -102,7 +102,7 @@ $app->post('/line', function (ServerRequestInterface $request, ResponseInterface
 
 				if ($item !== null) {
 					$this->logger->addDebug("item" . $item->getItemName());
-					$message_text = 'expire date of ' . $item->getItemName() . ' is ' . $item->getExpireDate()->format('Y-m-d');
+					$message_text = sprintf('%s の賞味期限は %s です', $item->getItemName(), $item->getExpireDate()->format('Y-m-d'));
 					$this->logger->addDebug("messages" . $message_text);
 
 					$post = array(
