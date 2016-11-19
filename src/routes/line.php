@@ -5,16 +5,27 @@ use Psr\Http\Message\ServerRequestInterface;
 
 define('CRYPT_METHOD', 'AES-128-ECB'); // コピペミスを検知するためだけだが、もっと強いほうがいい？
 define('CRYPT_KEY', getenv('FF_CRYPT_KEY') ?: '~x.SrFBeKu-/v5s;.?K[!K-yUA3y\GVS');
+define('LINE_CHANNEL_SECRET', getenv('LINE_CHANNEL_SECRET'));
+define('LINE_CHANNEL_ACCESS_TOKEN', getenv('LINE_CHANNEL_ACCESS_TOKEN'));
 
-$app->post('/line', function($request, $response, $args) {
+$app->post('/line', function (ServerRequestInterface $request, ResponseInterface $response, $args) {
+	$channelSecret = LINE_CHANNEL_SECRET; // Channel secret string
+	$httpRequestBody = $request->getBody()->getContents(); // Request body string
+	$hash = hash_hmac('sha256', $httpRequestBody, $channelSecret, true);
+	$signature = base64_encode($hash);
+	// Compare X-Line-Signature request header string and the signature
+	if ($request->getHeader('X-Line-Signature') !== $signature) {
+		$this->logger->error('line signature verification failed');
+		return get_renderer()->renderAsError($response, 400, 'Bad Request', 'Line signature verification failed');
+	}
+
 	$url = 'https://api.line.me/v2/bot/message/reply';
-	$channel_access_token = getenv("LINE_CHANNEL_ACCESS_TOKEN");
+	$channel_access_token = LINE_CHANNEL_ACCESS_TOKEN;
 	$headers = array(
 		'Content-type: application/json',
 		"Authorization: Bearer {$channel_access_token}"
 	);
 
-	$this->logger->addDebug(getenv("LINE_CHANNEL_ACCESS_TOKEN"));
 	$json_string = file_get_contents('php://input');
 	$json_object = json_decode($json_string);
 
@@ -28,7 +39,7 @@ $app->post('/line', function($request, $response, $args) {
 
 			$post = null;
 			$this->logger->addDebug("token" . $token);
-			if ($event->type === 'message') {
+			/*if ($event->type === 'message') {
 				$post = array(
 					'replyToken' => $token,
 					'messages' => array(
@@ -38,7 +49,7 @@ $app->post('/line', function($request, $response, $args) {
 						)
 					)
 				);
-			}
+			}*/
 
 			if ($event->source->type === 'group' && strpos($event->message->text, 'familytoken') !== false) {
 				$redis = new Redis();
@@ -155,10 +166,9 @@ $app->post('/line', function($request, $response, $args) {
 			];
 
 			return $response->withJson($data);
-
-
 		}
 	}
+	return $response;
 });
 
 $app->post('/line/user', function (ServerRequestInterface $request, ResponseInterface $response, $args) {
