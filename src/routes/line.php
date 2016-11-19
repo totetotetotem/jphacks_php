@@ -15,7 +15,8 @@ $app->post('/line', function (ServerRequestInterface $request, ResponseInterface
 	$signature = base64_encode($hash);
 	// Compare X-Line-Signature request header string and the signature
 	if ($request->getHeader('X-Line-Signature') !== $signature) {
-		$this->logger->error('line signature verification failed');
+		$this->logger->error('line signature verification failed',
+			['expected' => $request->getHeader('X-Line-Signature'), 'actual' => $signature]);
 		return get_renderer()->renderAsError($response, 400, 'Bad Request', 'Line signature verification failed');
 	}
 
