@@ -17,7 +17,7 @@ function push_message_to_line(string $to, array $message_objects)
 	curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($post));
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 	$result = curl_exec($curl);
-	$this->logger->debug($result, ['to' => $to, 'status' => curl_getinfo($curl, CURLINFO_HTTP_CODE)]);
+	return $result;
 }
 
 // loggerとか用意するの面倒なのでバッチをSlimにのっけちゃう……
@@ -64,15 +64,16 @@ execute(function () {
 
 		if ($family->getRoomId() !== null) {
 			$this->logger->debug('sending push', ['fid' => $family->getFamilyId(), 'text' => $text]);
-			push_message_to_line($family->getRoomId(), $message_objects);
+			$result = push_message_to_line($family->getRoomId(), $message_objects);
+			$this->logger->debug($result);
 		} else {
 			foreach ($users as $user) {
 				if ($user->getLineId() !== null) {
 					$this->logger->debug('sending push', ['uid' => $user->getUserId(), 'text' => $text]);
-					push_message_to_line($user->getLineId(), $message_objects);
+					$result = push_message_to_line($user->getLineId(), $message_objects);
+					$this->logger->debug($result);
 				}
 			}
 		}
-
 	}
 });
